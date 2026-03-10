@@ -1,0 +1,31 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+
+# Terraform lock file (može i da se commituje ako želiš reproducibilnost)
+.terraform.lock.hcl
+
+# SSH keys
+*.pem
+*.key
+my-basic-private-key
+my-basic-key
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jenkins
+workspace/
