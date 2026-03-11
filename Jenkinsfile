@@ -1,7 +1,7 @@
 pipeline {
     agent {
         node {
-            label 'my-basic-agent'
+            label 'default-jenkins-agent'
         }
     }
 
@@ -30,6 +30,9 @@ pipeline {
         }
 
         stage('Run terraform') {
+            agent {
+                label 'my-basic-agent'
+            }
             steps {
                 echo 'Starting Terraform...'
                 sh '''
@@ -38,14 +41,14 @@ pipeline {
                     terraform apply -auto-approve
                     chmod 400 my-basic-private-key
                 '''
-                script {
-                    // Uzmi EC2 IP iz Terraform output
-                    env.EC2_IP = sh(
-                        script: 'terraform output -raw ec2_ip',
-                        returnStdout: true
-                    ).trim()
+                    script {
+                        // Uzmi EC2 IP iz Terraform output
+                        env.EC2_IP = sh(
+                            script: 'terraform output -raw ec2_ip',
+                            returnStdout: true
+                        ).trim()
+                    }
                 }
-            }
         }
 
         stage('Deploy app to EC2') {
