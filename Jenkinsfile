@@ -42,7 +42,7 @@ pipeline {
                    '''
                }
           }
-    }
+        }
         stage('Deploy') {
             agent { label 'my-basic-agent' }
             steps {
