@@ -24,18 +24,25 @@ pipeline {
             }
         }
 
-        stage('Run terraform') {
-            agent { label 'my-basic-agent' }
-            steps {
-                echo 'Running Terraform...'
-                sh '''
-                cd terraform
-                terraform init
-                terraform apply -auto-approve
-                '''
-            }
-        }
+	stage('Run terraform') {
+   	   agent { label 'my-basic-agent' }
+           steps {
+               echo 'Running Terraform...'
 
+               withCredentials([usernamePassword(
+                   credentialsId: 'aws-creds',
+                   usernameVariable: 'AWS_ACCESS_KEY_ID',
+                   passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+               )]) {
+
+                   sh '''
+                   cd terraform
+                   terraform init
+                   terraform apply -auto-approve
+                   '''
+               }
+          }
+    }
         stage('Deploy') {
             agent { label 'my-basic-agent' }
             steps {
