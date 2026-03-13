@@ -12,10 +12,15 @@ pipeline {
         stage('Build docker image') {
             agent { label 'my-basic-agent' }
             steps {
-		sh 'll'
-                echo 'Building Docker image...'
-                sh 'docker build -t my-basic-app .'
-		sh 'll'
+		sh '''
+		pwd
+		ls
+		echo "Bulding docker image..."
+		docker build -t my-basic-app .
+		pwd
+		ls
+		'''
+		
             }
         }
 
