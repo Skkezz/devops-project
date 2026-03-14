@@ -38,23 +38,32 @@ pipeline {
                    sh '''
                    cd terraform
                    terraform init
+                   terraform destroy -auto-approve || true
                    terraform apply -auto-approve
                    '''
                }
           }
         }
-        stage('Deploy') {
-            agent { label 'my-basic-agent' }
-            steps {
-                script {
-                    def EC2_IP = sh(
-                        script: 'cd terraform && terraform output -raw ec2_public_ip',
-                        returnStdout: true
-                    ).trim()
+    stage('Deploy') {
+    node('my-basic-agent') {
+        checkout scm
 
-                    sh """
-                    cd terraform
-                    scp -o StrictHostKeyChecking=no -i my-basic-private-key test.txt ec2-user@${EC2_IP}:/home/ec2-user/
+        script {
+            // Dobijamo Terraform output i čuvamo ga u promenljivu
+            env.EC2_IP = sh(
+                script: "cd terraform && terraform output -raw ec2_public_ip",
+                returnStdout: true
+            ).trim()
+
+            env.SSH_USER = sh(
+                script: "cd terraform && terraform output -raw shh_user",
+                returnStdout: true
+            ).trim()
+
+            // SCP fajl na EC2
+            sh """
+            scp -o StrictHostKeyChecking=no -i terraform/my-basic-private-key \
+            test.txt $SSH_USER@$EC2_IP:/home/$SSH_USER/
             """
         }
     }
