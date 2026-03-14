@@ -48,22 +48,23 @@ pipeline {
             agent { label 'my-basic-agent' }
             steps {
                 script {
-                    // Dobijamo Terraform output i čuvamo ga u promenljivu
-                    env.EC2_IP = sh(
+                        // 1. Terraform outputs u Groovy promenljive
+                    def ec2_ip = sh(
                         script: "cd terraform && terraform output -raw ec2_public_ip",
                         returnStdout: true
                     ).trim()
 
-                    env.SSH_USER = sh(
+                    def ssh_user = sh(
                         script: "cd terraform && terraform output -raw shh_user",
                         returnStdout: true
                     ).trim()
 
+                    echo "EC2_IP: ${ec2_ip}"
+                    echo "SSH_USER: ${ssh_user}"
+
                     // SCP fajl na EC2
-                    sh """
-                    scp -o StrictHostKeyChecking=no -i terraform/my-basic-private-key \
-                    app/app.py $SSH_USER@$EC2_IP:/home/$SSH_USER/
-                    """
+                    // 2. SCP fajl
+                    sh "scp -o StrictHostKeyChecking=no -i terraform/my-basic-private-key app/app.py ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
         }
     }
 }
