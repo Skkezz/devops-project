@@ -51,7 +51,7 @@ pipeline {
                     ).trim()
 
                     def ssh_user = sh(
-                        script: "cd terraform && terraform output -raw shh_user",
+                        script: "cd terraform && terraform output -raw ssh_user",
                         returnStdout: true
                     ).trim()
                     
