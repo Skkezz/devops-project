@@ -48,15 +48,16 @@ pipeline {
             steps {
                 script {
                     def EC2_IP = sh(
-                        script: 'terraform output -raw ec2_ip',
+                        script: 'cd terraform && terraform output -raw ec2_public_ip',
                         returnStdout: true
                     ).trim()
 
                     sh """
-                    scp -i terraform/my-basic-private-key terraform/test.txt ec2-user@${EC2_IP}:/home/ec2-user/
-                    """
-                }
-            }
+                    cd terraform
+                    scp -o StrictHostKeyChecking=no -i my-basic-private-key test.txt ec2-user@${EC2_IP}:/home/ec2-user/
+            """
         }
+    }
+}
     }
 }
