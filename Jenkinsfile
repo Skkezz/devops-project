@@ -58,7 +58,8 @@ pipeline {
                         script: "cd terraform && terraform output -raw shh_user",
                         returnStdout: true
                     ).trim()
-
+                    
+                    sh 'terraform refresh'
                     echo "EC2_IP: ${ec2_ip}"
                     echo "SSH_USER: ${ssh_user}"
 
