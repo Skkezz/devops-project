@@ -62,7 +62,7 @@ pipeline {
                     // SCP fajl na EC2
                     sh """
                     scp -o StrictHostKeyChecking=no -i terraform/my-basic-private-key \
-                    test.txt $SSH_USER@$EC2_IP:/home/$SSH_USER/
+                    app/app.py $SSH_USER@$EC2_IP:/home/$SSH_USER/
                     """
         }
     }
