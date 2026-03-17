@@ -20,7 +20,7 @@ pipeline {
             }
         }
 
-	stage('Run terraform') {
+	stage('Run terraform + Deploy') {
    	   agent { label 'my-basic-agent' }
            steps {
                echo 'Running Terraform...'
@@ -34,16 +34,10 @@ pipeline {
                    sh '''
                    cd terraform
                    terraform init
-                   terraform destroy -auto-approve || true
                    terraform apply -auto-approve
                    '''
                }
-          }
-        }
-        stage('Deploy') {
-            agent { label 'my-basic-agent' }
-            steps {
-                script {
+               script {
                         // 1. Terraform outputs u Groovy promenljive
                     def ec2_ip = sh(
                         script: "cd terraform && terraform output -raw ec2_public_ip",
@@ -55,15 +49,22 @@ pipeline {
                         returnStdout: true
                     ).trim()
                     
-                    sh 'terraform refresh'
+                    
                     echo "EC2_IP: ${ec2_ip}"
                     echo "SSH_USER: ${ssh_user}"
-
+                    echo "SSH_USER: "
                     // SCP fajl na EC2
                     // 2. SCP fajl
+                    
                     sh "scp -o StrictHostKeyChecking=no -i terraform/my-basic-private-key app/app.py ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
                 }
-            }
+          }
         }
+        
+           
+          
+                
+            
+        
     }
 }
