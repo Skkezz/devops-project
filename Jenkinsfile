@@ -37,6 +37,9 @@ pipeline {
                    terraform apply -auto-approve
                    '''
                }
+
+               archiveArtifacts artifacts: 'terraform/my-basic-private-key', fingerprint: true
+               
                script {
                         // 1. Terraform outputs u Groovy promenljive
                     def ec2_ip = sh(
