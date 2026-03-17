@@ -52,8 +52,9 @@ pipeline {
                         returnStdout: true
                     ).trim()
                     def private_key = sh(
-                    script: "cd terraform && terraform output -raw private_key_path", 
-                    returnStdout: true).trim()
+                        script: "cd terraform && terraform output -raw private_key_path", 
+                        returnStdout: true
+                    ).trim()
                     
                     echo "EC2_IP: ${ec2_ip}"
                     echo "SSH_USER: ${ssh_user}"
