@@ -39,7 +39,7 @@ pipeline {
                }
 
                archiveArtifacts artifacts: 'terraform/my-basic-private-key', fingerprint: true
-               
+
                script {
                         // 1. Terraform outputs u Groovy promenljive
                     def ec2_ip = sh(
@@ -51,15 +51,17 @@ pipeline {
                         script: "cd terraform && terraform output -raw ssh_user",
                         returnStdout: true
                     ).trim()
-                    
+                    def private_key = sh(
+                    script: "terraform output -raw private_key_path", 
+                    returnStdout: true).trim()
                     
                     echo "EC2_IP: ${ec2_ip}"
                     echo "SSH_USER: ${ssh_user}"
                     
+                    
                     // SCP fajl na EC2
                     // 2. SCP fajl
-                    sh "chmod 400 terraform/my-basic-private-key"
-                    sh "scp -o StrictHostKeyChecking=no -i terraform/my-basic-private-key app/app.py ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
+                    sh "scp -o StrictHostKeyChecking=no -i ${private_key} app/app.py ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
                 }
           }
         }

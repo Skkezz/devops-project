@@ -65,20 +65,25 @@ resource "aws_security_group" "my_security_group" {
   }
 }
 
-resource "tls_private_key" "RSA" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
 
-resource "local_file" "TF-key" {
-  content  = tls_private_key.RSA.private_key_pem
-  filename = "my-basic-private-key"
-}
 
-resource "aws_key_pair" "TF-public-key" {
+# resource "tls_private_key" "RSA" {
+#   algorithm = "RSA"
+#   rsa_bits  = 4096
+# }
+
+# resource "local_file" "TF-key" {
+#   content  = tls_private_key.RSA.private_key_pem
+#   filename = "my-basic-private-key"
+# }
+
+resource "aws_key_pair" "my_key" {
   key_name   = "my-basic-key"
-  public_key = tls_private_key.RSA.public_key_openssh
+  public_key = file("~/.ssh/id_rsa.pub")
 }
+
+
+
 
 resource "aws_instance" "my_ec2" {
   ami           = var.ec2_ami
