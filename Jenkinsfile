@@ -34,7 +34,7 @@ pipeline {
                    sh '''
                    cd terraform
                    terraform init
-                   terraform destroy -auto-approve ||
+                   terraform destroy -auto-approve || true
                    terraform apply -auto-approve
                    '''
                }
@@ -52,10 +52,7 @@ pipeline {
                         script: "cd terraform && terraform output -raw ssh_user",
                         returnStdout: true
                     ).trim()
-                    def private_key = sh(
-                        script: "cd terraform && terraform output -raw private_key_path", 
-                        returnStdout: true
-                    ).trim()
+                    
                     
                     echo "EC2_IP: ${ec2_ip}"
                     echo "SSH_USER: ${ssh_user}"
@@ -63,7 +60,8 @@ pipeline {
                     
                     // SCP fajl na EC2
                     // 2. SCP fajl
-                    sh "scp -o StrictHostKeyChecking=no -i ${private_key} app/app.py ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
+                    sh "chmod 400 terraform/my-basic-private-key-2"
+                    sh "scp -o StrictHostKeyChecking=no -i terraform/my-basic-private-key app/app.py ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
                 }
           }
         }
