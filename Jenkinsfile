@@ -55,7 +55,7 @@ pipeline {
                     
                     // SCP fajl na EC2
                     // 2. SCP fajl
-                    sh "sudo chmod 400 terraform/my-basic-private-key"
+                    sh "chmod 400 terraform/my-basic-private-key"
                     sh "scp -o StrictHostKeyChecking=no -i terraform/my-basic-private-key app/app.py ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
                 }
           }
