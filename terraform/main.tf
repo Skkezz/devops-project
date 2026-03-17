@@ -92,7 +92,7 @@ resource "aws_instance" "my_ec2" {
   subnet_id                   = aws_subnet.my_subnet.id
   vpc_security_group_ids      = [aws_security_group.my_security_group.id]
   associate_public_ip_address = true
-  key_name                    = aws_key_pair.TF-public-key.key_name
+  key_name                    = aws_key_pair.my_key.key_name
 
   tags = {
     Name = var.ec2_public_name
