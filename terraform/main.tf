@@ -65,8 +65,6 @@ resource "aws_security_group" "my_security_group" {
   }
 }
 
-
-
 resource "tls_private_key" "RSA" {
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -78,10 +76,9 @@ resource "local_file" "TF-key" {
 }
 
 resource "aws_key_pair" "TF-public-key" {
-  key_name   = "my-basic-key-2"
+  key_name   = "my-basic-key"
   public_key = tls_private_key.RSA.public_key_openssh
 }
-
 
 resource "aws_instance" "my_ec2" {
   ami           = var.ec2_ami

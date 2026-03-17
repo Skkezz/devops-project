@@ -34,13 +34,11 @@ pipeline {
                    sh '''
                    cd terraform
                    terraform init
-                   terraform destroy -auto-approve || true
                    terraform apply -auto-approve
                    '''
                }
 
                archiveArtifacts artifacts: 'terraform/my-basic-private-key', fingerprint: true
-
                script {
                         // 1. Terraform outputs u Groovy promenljive
                     def ec2_ip = sh(
@@ -57,11 +55,10 @@ pipeline {
                     echo "EC2_IP: ${ec2_ip}"
                     echo "SSH_USER: ${ssh_user}"
                     
-                    
                     // SCP fajl na EC2
                     // 2. SCP fajl
-                    sh "chmod 400 terraform/my-basic-private-key-2"
-                    sh "scp -o StrictHostKeyChecking=no -i terraform/my-basic-private-key-2 app/app.py ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
+                    sh "chmod 400 terraform/my-basic-private-key"
+                    sh "scp -o StrictHostKeyChecking=no -i terraform/my-basic-private-key app/app.py ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
                 }
           }
         }
