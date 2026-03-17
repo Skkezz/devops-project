@@ -6,6 +6,3 @@ output "ssh_user" {
   value = "ec2-user"
 }
 
-output "private_key_path"{
-  value = aws_key_pair.TF-key.key_name
-}

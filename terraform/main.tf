@@ -78,7 +78,7 @@ resource "local_file" "TF-key" {
 }
 
 resource "aws_key_pair" "TF-public-key" {
-  key_name   = "my-basic-key"
+  key_name   = "my-basic-key-2"
   public_key = tls_private_key.RSA.public_key_openssh
 }
 
