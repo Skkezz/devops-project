@@ -7,5 +7,5 @@ output "ssh_user" {
 }
 
 output "private_key_path"{
-  value = aws_key_pair.my_key.key_name
+  value = aws_key_pair.TF-key.key_name
 }
