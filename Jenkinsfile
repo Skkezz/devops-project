@@ -58,7 +58,25 @@ pipeline {
                     // SCP fajl na EC2
                     // 2. SCP fajl
                     sh "chmod 400 terraform/my-basic-private-key"
-                    sh "scp -o StrictHostKeyChecking=no -i terraform/my-basic-private-key app/app.py ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
+                    sh "scp -r -o StrictHostKeyChecking=no -i terraform/my-basic-private-key app/ ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
+                    
+
+                    // ssh na instancu i docker
+                    sh "ssh -o StrictHostKeyChecking=no -i terraform/my-basic-private-key ${ssh_user}@${ec2_ip}"
+                    
+                    
+                    sh "docker pull matija24/my-basic-server:latest"
+                    sh "docker images"
+                    sh "docker run -d --name my-basic-server -p 5000:5000 matija24/my-basic-server:latest"
+                    sh "docker ps"
+                    
+                    sh '''
+                    echo "#############"
+                    echo "IP address of EC2:"
+                    sh 'curl ifconfig.me'
+                    echo "#############"
+                    '''
+
                 }
           }
         }

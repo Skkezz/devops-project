@@ -96,6 +96,9 @@ resource "aws_instance" "my_ec2" {
   associate_public_ip_address = true
   key_name                    = aws_key_pair.TF-public-key.key_name
 
+  user_data = templatefile("${path.module}/user_data.tftpl", {
+    creator = "Matija"
+  })
   tags = {
     Name = var.ec2_public_name
   }
