@@ -65,17 +65,14 @@ pipeline {
                     sh "ssh -o StrictHostKeyChecking=no -i terraform/my-basic-private-key ${ssh_user}@${ec2_ip}"
                     
                     
-                    sh "docker pull matija24/my-basic-server:latest"
+                    // sh "docker pull matija24/my-basic-server:latest"
                     sh "docker images"
-                    sh "docker run -d --name my-basic-server -p 5000:5000 matija24/my-basic-server:latest"
+                    // sh "docker run -d --name my-basic-server -p 5000:5000 matija24/my-basic-server:latest"
+                    sh "docker run -d -p 5000:5000 my-basic-server"
                     sh "docker ps"
+
+
                     
-                    sh '''
-                    echo "#############"
-                    echo "IP address of EC2:"
-                    sh 'curl ifconfig.me'
-                    echo "#############"
-                    '''
 
                 }
           }
