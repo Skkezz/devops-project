@@ -68,7 +68,7 @@ pipeline {
                     // sh "docker pull matija24/my-basic-server:latest"
                     sh "docker images"
                     // sh "docker run -d --name my-basic-server -p 5000:5000 matija24/my-basic-server:latest"
-                    sh "docker run -d -p 5000:5000 -v /var/run/docker.sock:/var/run/docker.sock my-basic-app"
+                    sh "docker run -d -p 5000:5000 my-basic-app"
                     sh "docker ps"
 
 
