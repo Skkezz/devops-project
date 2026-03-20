@@ -72,20 +72,20 @@ resource "aws_security_group" "my_security_group" {
   }
 }
 
-resource "tls_private_key" "RSA" {
-  algorithm = "RSA"
-  rsa_bits  = 4096
-}
+# resource "tls_private_key" "RSA" {
+#   algorithm = "RSA"
+#   rsa_bits  = 4096
+# }
 
-resource "local_file" "TF-key" {
-  content  = tls_private_key.RSA.private_key_pem
-  filename = "my-basic-private-key"
-}
+# resource "local_file" "TF-key" {
+#   content  = tls_private_key.RSA.private_key_pem
+#   filename = "my-basic-private-key"
+# }
 
-resource "aws_key_pair" "TF-public-key" {
-  key_name   = "my-basic-key"
-  public_key = tls_private_key.RSA.public_key_openssh
-}
+# resource "aws_key_pair" "TF-public-key" {
+#   key_name   = "my-basic-key"
+#   public_key = tls_private_key.RSA.public_key_openssh
+# }
 
 resource "aws_instance" "my_ec2" {
   ami           = var.ec2_ami
@@ -94,7 +94,7 @@ resource "aws_instance" "my_ec2" {
   subnet_id                   = aws_subnet.my_subnet.id
   vpc_security_group_ids      = [aws_security_group.my_security_group.id]
   associate_public_ip_address = true
-  key_name                    = aws_key_pair.TF-public-key.key_name
+  key_name                    = "my-basic-private-key"
 
   user_data = templatefile("${path.module}/user_data.tftpl", {
     creator = "Matija"

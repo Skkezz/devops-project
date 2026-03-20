@@ -58,7 +58,7 @@ pipeline {
                     // SCP fajl na EC2
                     // 2. SCP fajl
                     sh "chmod 400 terraform/my-basic-private-key"
-                    sh "scp -r -o StrictHostKeyChecking=no -i terraform/my-basic-private-key app/ ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
+                    sh "scp -r -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa.pub app/ ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
                     
 
                     // ssh na instancu i docker, iako imam app file, image vucem preko docker hub-a.
