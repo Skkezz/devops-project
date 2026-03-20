@@ -61,15 +61,17 @@ pipeline {
                     sh "scp -r -o StrictHostKeyChecking=no -i terraform/my-basic-private-key app/ ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
                     
 
-                    // ssh na instancu i docker
-                    sh "ssh -o StrictHostKeyChecking=no -i terraform/my-basic-private-key ${ssh_user}@${ec2_ip}"
+                    // ssh na instancu i docker, iako imam app file, image vucem preko docker hub-a.
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no -i terraform/my-basic-private-key ${ssh_user}@${ec2_ip}"
+                        docker pull matija24/my-basic-server:latest &&
+                        docker images &&
+                        docker run -d --name my-basic-app -p 5000:5000 matija24/my-basic-server:latest &&
+                        docker ps -a 
+                        "
+                    '''
                     
-                    
-                    // sh "docker pull matija24/my-basic-server:latest"
-                    sh "docker images"
-                    // sh "docker run -d --name my-basic-server -p 5000:5000 matija24/my-basic-server:latest"
-                    sh "docker run -d -p 5000:5000 my-basic-app"
-                    sh "docker ps"
+                   
 
 
                     
