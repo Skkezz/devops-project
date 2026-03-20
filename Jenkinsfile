@@ -67,7 +67,7 @@ pipeline {
                     sleep 60
                     '''
                     sh """
-                    ssh -o StrictHostKeyChecking=no -i terraform/my-basic-private-key ${ssh_user}@${ec2_ip} "
+                    ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa.pub ${ssh_user}@${ec2_ip} "
                        which docker || echo 'Docker not installed' ;
                        docker pull matija24/my-basic-server:latest &&
                        docker images &&
@@ -75,12 +75,7 @@ pipeline {
                        docker ps -a 
                        "
                     """
-                    
-                   
-
-
-                    
-
+                
                 }
           }
         }
