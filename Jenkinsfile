@@ -62,12 +62,17 @@ pipeline {
                     
 
                     // ssh na instancu i docker, iako imam app file, image vucem preko docker hub-a.
+                    sh '''
+                    echo "Waiting for EC2 to be ready..."
+                    sleep 60
+                    '''
                     sh """
                     ssh -o StrictHostKeyChecking=no -i terraform/my-basic-private-key ${ssh_user}@${ec2_ip} "
-                       sudo docker pull matija24/my-basic-server:latest &&
-                       sudo docker images &&
-                       sudo docker run -d --name my-basic-app -p 5000:5000 matija24/my-basic-server:latest &&
-                       sudo docker ps -a 
+                       which docker || echo 'Docker not installed' ;
+                       docker pull matija24/my-basic-server:latest &&
+                       docker images &&
+                       docker run -d --name my-basic-app -p 5000:5000 matija24/my-basic-server:latest &&
+                       docker ps -a 
                        "
                     """
                     
