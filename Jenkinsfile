@@ -19,6 +19,9 @@ pipeline {
 
         
             }
+          
+        }
+
         stage("Removing previous key or not"){
             agent {label "my-basic-agent"}
             steps{
@@ -27,8 +30,7 @@ pipeline {
                 rm -f terraform/my-basic-private-key.pem
                 '''
             }
-        }    
-        }
+        }  
 
 	stage('Run terraform + Deploy') {
    	   agent { label 'my-basic-agent' }
