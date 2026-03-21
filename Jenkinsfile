@@ -23,7 +23,7 @@ pipeline {
         }
 
         stage("Removing previous key or not"){
-            agent {label "my-basic-agent"}
+            agent { docker { image 'amazon/aws-cli'}}
             steps{
                 sh '''
                 aws ec2 delete-key-pair --key-name my-basic-private-key || echo "Key does not exist"
