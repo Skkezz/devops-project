@@ -3,7 +3,7 @@ pipeline {
 
     stages {
         stage('Checkout') {
-            agent { label 'default-jenkins-agent' }
+            agent any
             steps {
                 checkout scm
             }
