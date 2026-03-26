@@ -25,6 +25,11 @@ pipeline {
         stage("Removing previous key or not"){
             agent { label 'my-basic-agent' }
             steps{
+
+                withAWS(
+                    credentials: 'aws-creds', region: 'eu-central-1'
+                )
+
                 sh '''
                 aws ec2 delete-key-pair --key-name my-basic-private-key || echo "Key does not exist"
                 rm -f terraform/my-basic-private-key.pem
@@ -36,18 +41,13 @@ pipeline {
             agent { label 'my-basic-agent' }
             steps {
                 echo 'Running Terraform...'
-
-                withAWS(
-                    credentials: 'aws-creds', region: 'eu-central-1'
-                ) {
-
-                    sh '''
-                    cd terraform
-                    terraform init
-                    terraform apply -auto-approve
-                    '''
-                }
-
+            
+                sh '''
+                cd terraform
+                terraform init
+                terraform apply -auto-approve -no-color
+                '''    
+           
                 archiveArtifacts artifacts: 'terraform/my-basic-private-key', fingerprint: true
                 script {
                             // 1. Terraform outputs u Groovy promenljive
@@ -62,11 +62,9 @@ pipeline {
                         ).trim()
                         
                         
-                        echo "EC2_IP: ${ec2_ip}"
-                        echo "SSH_USER: ${ssh_user}"
-                        
-                        // SCP fajl na EC2
-                        // 2. SCP fajl
+                        echo "IP address of EC2: ${ec2_ip}"
+                        echo "User for EC2: ${ssh_user}"
+                
                         sh "chmod 400 terraform/my-basic-private-key"
                         sh "scp -r -o StrictHostKeyChecking=no -i terraform/my-basic-private-key app/ ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
                         
@@ -74,7 +72,7 @@ pipeline {
                         // ssh na instancu i docker, iako imam app file, image vucem preko docker hub-a.
                         sh '''
                         echo "Waiting for EC2 to be ready..."
-                        sleep 60
+                        sleep 25
                         '''
                         sh """
                         ssh -o StrictHostKeyChecking=no -i terraform/my-basic-private-key ${ssh_user}@${ec2_ip} "
