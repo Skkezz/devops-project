@@ -77,7 +77,7 @@ pipeline {
                         // ssh na instancu i docker, iako imam app file, image vucem preko docker hub-a.
                         sh '''
                         echo "Waiting for EC2 to be ready..."
-                        sleep 40
+                        sleep 60
                         '''
                         sh """
                         ssh -o StrictHostKeyChecking=no -i terraform/my-basic-private-key ${ssh_user}@${ec2_ip} "
