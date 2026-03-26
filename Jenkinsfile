@@ -27,12 +27,13 @@ pipeline {
             steps {
                 withAWS(credentials: 'aws-creds', region: 'eu-central-1') {
                     sh '''
-                    if ! aws ec2 delete-key-pair --key-name my-basic-private-key > /dev/null 2>&1; then
+                    if ! aws ec2 describe-key-pairs --key-name my-basic-key > /dev/null 2>&1; then
                         echo "Key does not exist."
                     else 
-                        aws ec2 delete-key-pair --key-name my-basic-private-key
+                        aws ec2 delete-key-pair --key-name my-basic-key
                         echo "Previous key deleted!"
-                    fi                
+                    fi
+                    rm -f terraform/my-basic-private-key                
                     '''
 
                    echo "Running terraform..."
