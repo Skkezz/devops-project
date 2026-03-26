@@ -25,27 +25,30 @@ pipeline {
         stage('Run terraform + Deploy') {
             agent { label 'my-basic-agent' }
             steps {
+                withAWS(credentials: 'aws-creds', region: 'eu-central-1') {
+                   sh ''''
+                   aws ec2 delete-key-pair --key-name my-basic-private-key || echo "Key does not exist."
+                   rm -f terraform/my-basic-private-key
+                   '''
 
-                withAWS(
-                    credentials: 'aws-creds', region: 'eu-central-1'
-                )
-                {
-                sh '''
-                aws ec2 delete-key-pair --key-name my-basic-private-key || echo "Key does not exist"
-                rm -f terraform/my-basic-private-key.pem
-                '''
+                   echo "Running terraform..."
+
+                    withEnv([
+                        "AWS_ACCESS_KEY_ID=${env.AWS_ACCESS_KEY_ID}",
+                        "AWS_SECRET_ACCESS_KEY=${env.AWS_SECRET_ACCESS_KEY}",
+                        "AWS_DEFAULT_REGION=eu-central-1"
+                    ]) {
+            
+                        sh '''
+                        cd terraform
+                        terraform init
+                        terraform apply -auto-approve -no-color
+                        '''
+                    }
                 }
-
-
-                echo 'Running Terraform...'
-             
-                sh '''
-                cd terraform
-                terraform init
-                terraform apply -auto-approve -no-color
-                '''    
-           
+                
                 archiveArtifacts artifacts: 'terraform/my-basic-private-key', fingerprint: true
+
                 script {
                             // 1. Terraform outputs u Groovy promenljive
                         def ec2_ip = sh(
