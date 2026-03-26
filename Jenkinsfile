@@ -20,11 +20,11 @@ pipeline {
         
             }
           
-        }
+        }  
 
-        stage("Removing previous key or not"){
+        stage('Run terraform + Deploy') {
             agent { label 'my-basic-agent' }
-            steps{
+            steps {
 
                 withAWS(
                     credentials: 'aws-creds', region: 'eu-central-1'
@@ -35,20 +35,16 @@ pipeline {
                 rm -f terraform/my-basic-private-key.pem
                 '''
                 }
-            }
-        }  
 
-        stage('Run terraform + Deploy') {
-            agent { label 'my-basic-agent' }
-            steps {
+
                 echo 'Running Terraform...'
-            
+                {
                 sh '''
                 cd terraform
                 terraform init
                 terraform apply -auto-approve -no-color
                 '''    
-           
+                }
                 archiveArtifacts artifacts: 'terraform/my-basic-private-key', fingerprint: true
                 script {
                             // 1. Terraform outputs u Groovy promenljive
