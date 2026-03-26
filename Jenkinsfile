@@ -37,11 +37,9 @@ pipeline {
             steps {
                 echo 'Running Terraform...'
 
-                withCredentials([usernamePassword(
-                    credentialsId: 'aws-creds',
-                    usernameVariable: 'AWS_ACCESS_KEY_ID',
-                    passwordVariable: 'AWS_SECRET_ACCESS_KEY'
-                )]) {
+                withAWS(
+                    credentials: 'aws-creds', region: 'eu-central-1'
+                ) {
 
                     sh '''
                     cd terraform
