@@ -26,10 +26,14 @@ pipeline {
             agent { label 'my-basic-agent' }
             steps {
                 withAWS(credentials: 'aws-creds', region: 'eu-central-1') {
-                   sh '''
-                   aws ec2 delete-key-pair --key-name my-basic-private-key || echo "Key does not exist."
-                   rm -f terraform/my-basic-private-key
-                   '''
+                    sh '''
+                    if ! aws ec2 delete-key-pair --key-name my-basic-private-key > /dev/null 2>&1; then
+                        echo "Key does not exist."
+                    else 
+                        aws ec2 delete-key-pair --key-name my-basic-private-key
+                        echo "Previous key deleted!"
+                    fi                
+                    '''
 
                    echo "Running terraform..."
 
@@ -72,7 +76,7 @@ pipeline {
                         // ssh na instancu i docker, iako imam app file, image vucem preko docker hub-a.
                         sh '''
                         echo "Waiting for EC2 to be ready..."
-                        sleep 25
+                        sleep 40
                         '''
                         sh """
                         ssh -o StrictHostKeyChecking=no -i terraform/my-basic-private-key ${ssh_user}@${ec2_ip} "
