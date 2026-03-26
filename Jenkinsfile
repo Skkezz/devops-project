@@ -38,13 +38,13 @@ pipeline {
 
 
                 echo 'Running Terraform...'
-                {
+             
                 sh '''
                 cd terraform
                 terraform init
                 terraform apply -auto-approve -no-color
                 '''    
-                }
+           
                 archiveArtifacts artifacts: 'terraform/my-basic-private-key', fingerprint: true
                 script {
                             // 1. Terraform outputs u Groovy promenljive
