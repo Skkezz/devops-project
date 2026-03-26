@@ -29,11 +29,12 @@ pipeline {
                 withAWS(
                     credentials: 'aws-creds', region: 'eu-central-1'
                 )
-
+                {
                 sh '''
                 aws ec2 delete-key-pair --key-name my-basic-private-key || echo "Key does not exist"
                 rm -f terraform/my-basic-private-key.pem
                 '''
+                }
             }
         }  
 
