@@ -26,7 +26,7 @@ pipeline {
             agent { label 'my-basic-agent' }
             steps {
                 withAWS(credentials: 'aws-creds', region: 'eu-central-1') {
-                   sh ''''
+                   sh '''
                    aws ec2 delete-key-pair --key-name my-basic-private-key || echo "Key does not exist."
                    rm -f terraform/my-basic-private-key
                    '''
