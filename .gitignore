@@ -30,3 +30,6 @@ Thumbs.db
 
 # Jenkins
 workspace/
+
+# AWS
+.aws/
