@@ -25,7 +25,7 @@ pipeline {
         stage('Run terraform + Deploy') {
             agent { label 'my-basic-agent' }
             steps {
-                withAWS(credentials: 'aws-creds', region: 'eu-central-1') 
+                withAWS(credentials: 'aws-creds', region: 'eu-central-1'){ 
 
                 echo "Running terraform..."
 
@@ -75,9 +75,9 @@ pipeline {
                     
 
 
-                        
-
                     }
+
+                }   
             }
         }
         
