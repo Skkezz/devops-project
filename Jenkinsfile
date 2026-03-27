@@ -25,33 +25,16 @@ pipeline {
         stage('Run terraform + Deploy') {
             agent { label 'my-basic-agent' }
             steps {
-                withAWS(credentials: 'aws-creds', region: 'eu-central-1') {
-                    sh '''
-                    if ! aws ec2 describe-key-pairs --key-name my-basic-key > /dev/null 2>&1; then
-                        echo "Key does not exist."
-                    else 
-                        aws ec2 delete-key-pair --key-name my-basic-key
-                        echo "Previous key deleted!"
-                    fi
-                    rm -f terraform/my-basic-private-key                
-                    '''
+                withAWS(credentials: 'aws-creds', region: 'eu-central-1') 
 
-                   echo "Running terraform..."
+                echo "Running terraform..."
 
-                    withEnv([
-                        "AWS_ACCESS_KEY_ID=${env.AWS_ACCESS_KEY_ID}",
-                        "AWS_SECRET_ACCESS_KEY=${env.AWS_SECRET_ACCESS_KEY}",
-                        "AWS_DEFAULT_REGION=eu-central-1"
-                    ]) {
-            
-                        sh '''
-                        cd terraform
-                        terraform init
-                        terraform apply -auto-approve -no-color
-                        '''
-                    }
-                }
-                
+                sh '''
+                cd terraform
+                terraform init
+                terraform apply -auto-approve -no-color
+                '''
+
                 archiveArtifacts artifacts: 'terraform/my-basic-private-key', fingerprint: true
 
                 script {
@@ -96,7 +79,7 @@ pipeline {
 
                     }
             }
-            }
+        }
         
            
           
