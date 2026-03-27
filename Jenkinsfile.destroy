@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            agent any
+            steps {
+                checkout scm
+            }
+        }
+        stage ('Reconfigure terraform'){
+            agent { label 'my-basic-agent' }
+            steps {
+                 withAWS(credentials: 'aws-creds', region: 'eu-central-1'){
+
+                sh '''
+                echo "Reconfiguring terraform..."
+                cd terraform
+                terraform init -reconfigure
+                terraform destroy -auto-approve
+                '''
+                         
+                }
+            } 
+        }
+    }
+}
