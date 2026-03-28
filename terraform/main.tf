@@ -59,7 +59,7 @@ resource "aws_nat_gateway" "gw"{
   tags = {
     Name = "Basic NAT gateway"
   }
-  depends_on = [aws_internet_gateway.my_igw.id]  
+  depends_on = [aws_internet_gateway.my_igw]  
 }
 
 resource "aws_route_table" "my_public_rt" {
@@ -152,7 +152,7 @@ resource "aws_instance" "my_public_ec2" {
   instance_type = var.ec2_public_type
 
   subnet_id                   = aws_subnet.my_public_subnet.id
-  vpc_security_group_ids      = [aws_security_group.my_security_group.id]
+  vpc_security_group_ids      = [aws_security_group.my_security_public_group]
   associate_public_ip_address = true
   key_name                    = aws_key_pair.TF-public-key.key_name
 
@@ -175,7 +175,7 @@ resource "aws_security_group" "my_security_private_group"{
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [aws_instance.my_public_ec2.public_ip] // Public EC2 address
+    cidr_blocks = ["0.0.0.0/0"] // Public EC2 address
   }  
 }
 
