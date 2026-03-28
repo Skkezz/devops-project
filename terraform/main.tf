@@ -175,7 +175,7 @@ resource "aws_security_group" "my_security_private_group"{
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [aws_instance.my_ec2.public_ip] // Public EC2 address
+    cidr_blocks = [aws_instance.my_public_ec2.public_ip] // Public EC2 address
   }  
 }
 
