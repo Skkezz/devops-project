@@ -10,16 +10,15 @@ pipeline {
         stage ('Reconfigure terraform'){
             agent { label 'my-basic-agent' }
             steps {
-                 withAWS(credentials: 'aws-creds', region: 'eu-central-1'){
+                withAWS(credentials: 'aws-creds', region: 'eu-central-1'){
 
+                dir('terraform'){    
                 sh '''
                 echo "Reconfiguring terraform..."
-                cd terraform
                 terraform init -reconfigure
                 terraform plan -destroy -out=tfdestroy
                 '''
-
-                input message: 'Are you sure you want to destroy infrastructure?'
+                }
 
                 script{
                   def confirm = input(
@@ -33,8 +32,12 @@ pipeline {
                   }
                 }
 
-                sh "terraform apply -auto-approve tfdestroy"
-               
+                dir('terraform'){
+                sh '''
+                terraform apply -auto-approve tfdestroy
+                '''
+                }
+
                 }
             } 
         }
