@@ -22,23 +22,55 @@ variable "vpc_subnet_public_cidr" {
   default     = "10.0.0.0/24"
 }
 
-variable "ec2_public_name" {
-  description = "Value of the Name for the EC2 instance"
+variable "vpc_subnet_private_name" {
   type        = string
-  default     = "my-basic-ec2"
+  default     = "Value of the Name for the private subnet"
+  description = "private_subnet"
 }
 
-variable "ec2_ami" {
-  description = "Value of the AMI ID for the EC2 instance"
+variable "vpc_subnet_private_cidr" {
+  type        = string
+  default     = "Value of the CIDR range for the private subnet"
+  description = "10.0.1.0/24"
+}
+
+
+variable "ec2_public_name" {
+  description = "Value of the Name for the public EC2 instance"
+  type        = string
+  default     = "my-public-basic-ec2"
+}
+
+variable "ec2_public_ami" {
+  description = "Value of the AMI ID for the public EC2 instance"
   type        = string
   default     = "ami-096a4fdbcf530d8e0" #Amazon Linux 
 }
 
-variable "ec2_type" {
-  description = "Value of the instance type for the EC2"
+variable "ec2_public_type" {
+  description = "Value of the instance type for the public EC2"
   type        = string
   default     = "t3.micro"
 }
+
+variable ec2_private_name {
+  description = "Value of the Name for the private EC2 instance"
+  type        = string
+  default     = "my-private-basic-ec2"
+}
+
+variable "ec2_private_ami" {
+  description = "Value of the AMI ID for the private EC2 instance"
+  type        = string
+  default     = "ami-096a4fdbcf530d8e0" #Amazon Linux 
+}
+
+variable "ec2_private_type" {
+  description = "Value of the instance type for the private EC2"
+  type        = string
+  default     = "t3.micro"
+}
+
 
 variable "ig_name" {
   description = "Value of the Name for the internet gateway"
@@ -46,8 +78,14 @@ variable "ig_name" {
   default     = "my-basic-igw"
 }
 
-variable "route_table_name" {
+variable "route_public_table_name" {
   description = "Value of the Name for the public route table"
   type        = string
-  default     = "my-basic-rt"
+  default     = "my-basic-public-rt"
+}
+
+variable "route_private_table_name"{
+  description = "Value of the Name for the private route table"
+  type = string
+  default = "my-basic-private-rt"
 }
