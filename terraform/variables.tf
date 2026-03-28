@@ -24,14 +24,14 @@ variable "vpc_subnet_public_cidr" {
 
 variable "vpc_subnet_private_name" {
   type        = string
-  default     = "Value of the Name for the private subnet"
-  description = "private_subnet"
+  default     = "private_subnet"
+  description = "Value of the Name for the private subnet"
 }
 
 variable "vpc_subnet_private_cidr" {
   type        = string
-  default     = "Value of the CIDR range for the private subnet"
-  description = "10.0.1.0/24"
+  default     = "10.0.1.0/24"
+  description = "Value of the CIDR range for the private subnet"
 }
 
 
