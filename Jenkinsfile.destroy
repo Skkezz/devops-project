@@ -16,9 +16,10 @@ pipeline {
                 echo "Reconfiguring terraform..."
                 cd terraform
                 terraform init -reconfigure
-                terraform destroy -auto-approve
-                '''
-                         
+                terraform plan -destroy -out=tfdestroy
+                input message: 'Are you sure you want to destroy infrastructure?'
+                terraform destroy -auto-approve tfdestroy
+                '''  
                 }
             } 
         }

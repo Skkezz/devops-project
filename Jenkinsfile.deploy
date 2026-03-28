@@ -31,8 +31,9 @@ pipeline {
 
                 sh '''
                 cd terraform
-                terraform init
-                terraform apply -auto-approve -no-color
+                terraform init -reconfigure
+                terraform plan -out=tfdeploy
+                terraform apply -auto-approve -no-color tfdeploy
                 '''
 
                 archiveArtifacts artifacts: 'terraform/my-basic-private-key', fingerprint: true
