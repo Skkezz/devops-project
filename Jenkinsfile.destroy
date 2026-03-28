@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    parameters{
-        booleanParam(name: 'CONFIRM_DESTROY', defaultValue: false, description: 'Confirm destroy')
-    }
     stages {
         stage('Checkout') {
             agent any
@@ -25,12 +22,18 @@ pipeline {
                 input message: 'Are you sure you want to destroy infrastructure?'
 
                 script{
-                    if(!params.CONFIRM_DESTROY){
-                        error "Destroy not approved"
-                    }
+                  def confirm = input(
+                    message: 'Are you sure you want to destroy infrastructure',
+                    parameters: [
+                        booleanParam(name: 'Proceed', defaultValue: false, description: 'Confirm destroy')
+                    ]
+                  )
+                  if(!confirm){
+                    error "Destroy not approved"
+                  }
                 }
 
-                sh "terraform destroy -auto-approve tfdestroy"
+                sh "terraform apply -auto-approve tfdestroy"
                
                 }
             } 
