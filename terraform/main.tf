@@ -100,7 +100,7 @@ resource "aws_route_table_association" "my_private_assoc"{
   route_table_id = aws_route_table.my_private_rt.id
 }
 
-resource "aws_security_group" "my_security_group" {
+resource "aws_security_group" "my_security_public_group" {
   name        = "my-basic-public-sg"
   description = "my basic public security group"
   vpc_id      = aws_vpc.my_vpc.id
@@ -166,7 +166,7 @@ resource "aws_instance" "my_public_ec2" {
 
 ### Block za private ec2
 
-resource "aws_security_group" "my_security_group"{
+resource "aws_security_group" "my_security_private_group"{
   name        = "my-basic-private-sg"
   description = "my basic private security group"
   vpc_id      = aws_vpc.my_vpc.id
