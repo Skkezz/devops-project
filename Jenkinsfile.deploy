@@ -45,6 +45,11 @@ pipeline {
                             returnStdout: true
                         ).trim()
 
+                        def ec2_private_ip = sh(
+                            script: "cd terraform && terraform output -raw ec2_private_ip",
+                            returnStdout: true
+                        ).trim()
+
                         def ssh_user = sh(
                             script: "cd terraform && terraform output -raw ssh_user",
                             returnStdout: true
@@ -55,24 +60,30 @@ pipeline {
                         echo "User for EC2: ${ssh_user}"
                 
                         sh "chmod 400 terraform/my-basic-private-key"
+                        sh "scp -r -o StrictHostKeyChecking=no -i terraform/my-basic-private-key terraform/my-private-server-key ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
                         sh "scp -r -o StrictHostKeyChecking=no -i terraform/my-basic-private-key app/ ${ssh_user}@${ec2_ip}:/home/${ssh_user}/"
                         
 
-                        // ssh na instancu i docker, iako imam app file, image vucem preko docker hub-a.
+                        // ssh na public instancu
                         sh '''
                         echo "Waiting for EC2 to be ready..."
                         sleep 60
                         '''
+                        sh "ssh -o StrictHostKeyChecking=no -i terraform/my-basic-private-key ${ssh_user}@${ec2_private_ip} "
+                        
+
+                        // ssh i scp na private instancu    
                         sh """
-                        ssh -o StrictHostKeyChecking=no -i terraform/my-basic-private-key ${ssh_user}@${ec2_ip} "
+                        ls
+                        scp -r -o StrictHostKeyChecking=no -i terraform/my-basic-private-key app ${ssh_user}@${ec2_private_ip}:/home/${ssh_user}/
+                        rm -rf app
+                        ssh -o StrictHostKeyChecking=no -i my-private-server-key ${ssh_user}@${ec2_private_ip}
                         which docker || echo 'Docker not installed' ;
                         docker pull matija24/my-basic-server:latest &&
                         docker images &&
                         docker run -d --name my-basic-app -p 5000:5000 matija24/my-basic-server:latest &&
                         docker ps -a 
-                        "
                         """
-
                     }
 
                 }   

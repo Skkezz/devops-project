@@ -29,7 +29,7 @@ resource "aws_eip" "my_elastic_ip"{
   domain = "vpc"
 
   tags = {
-    Name = "my-basic-elastic-ip"
+    Name = "basic-elastic-ip"
   }
 }
 
@@ -52,9 +52,9 @@ resource "aws_internet_gateway" "my_igw" {
   }
 }
 
-resource "aws_nat_gateway" "gw"{
-  allocation_id = aws_eip.my_elastic_ip.id
-  subnet_id = aws_subnet.my_public_subnet.id
+resource "aws_nat_gateway" "nat"{
+  allocation_id  = aws_eip.my_elastic_ip.id
+  subnet_id      = aws_subnet.my_public_subnet.id
 
   tags = {
     Name = "Basic NAT gateway"
@@ -87,7 +87,7 @@ resource "aws_route" "my_public_route" {
 resource "aws_route" "my_nat_route"{
   route_table_id = aws_route_table.my_private_rt.id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id = aws_nat_gateway.gw.id
+  nat_gateway_id = aws_nat_gateway.nat.id
 }
 
 resource "aws_route_table_association" "my_public_assoc" {
@@ -166,6 +166,21 @@ resource "aws_instance" "my_public_ec2" {
 
 ### Block za private ec2
 
+resource "tls_private_key" "RSA-private-server-key"{
+  algorithm = "RSA"
+  rsa_bits = 4096
+}
+
+resource "local_file" "TF-private-server-key"{
+  content = tls_private_key.TF-private-server-key.private_key_pem
+  filename = "my-private-server-key"
+}
+
+resource "aws_key_pair" "TF-private-server-public-key"{
+  key_name = "my-private-server-public-key"
+  public_key = tls_private_key.RSA-private-server-key.public_key_openssh
+}
+
 resource "aws_security_group" "my_security_private_group"{
   name        = "my-basic-private-sg"
   description = "my basic private security group"
@@ -176,6 +191,13 @@ resource "aws_security_group" "my_security_private_group"{
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"] // Public EC2 address
+  }
+
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }  
 }
 
@@ -184,6 +206,7 @@ resource "aws_instance" "my_private_ec2"{
   instance_type = var.ec2_private_type
 
   subnet_id = aws_subnet.my_private_subnet.id
+  vpc_security_group_ids = [aws_security_group.my_security_private_group.id]
   associate_public_ip_address = false
   
 
