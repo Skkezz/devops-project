@@ -1,0 +1,41 @@
+#!/bin/bash
+yum update -y
+yum install -y docker nginx aws-cli
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo systemctl start nginx
+sudo systemctl enable nginx
+
+# Add ssm-user to docker group
+sudo usermod -aG docker ssm-user
+sudo systemctl restart docker
+
+# WAIT FOR FILE IN S3
+until aws s3 ls s3://matija-devops-docker-images-bucket/flask-app.tar.gz; do 
+    echo "Waiting for Docker image..."
+    sleep 15
+done
+
+# Download docker image from S3
+aws s3 cp s3://matija-devops-docker-images-bucket/flask-app.tar.gz /tmp/flask-app.tar.gz
+
+# Load Docker image
+sudo gunzip -c /tmp/flask-app.tar.gz | sudo docker load
+
+# Run Flask container
+sudo docker run -d --name my-basic-app -p 5000:5000 matija24/my-basic-server:latest
+
+# Setup Nginx reverse proxy
+cat <<EON > /etc/nginx/conf.d/default.conf
+server {
+    listen 80;
+    location / {
+        proxy_pass http://127.0.0.1:5000;
+    }
+}
+EON
+
+sudo systemctl restart nginx
+sudo systemctl enable nginx
+
+

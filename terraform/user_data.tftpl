@@ -1,8 +1,13 @@
 #!/bin/bash
 yum update -y
-yum install -y docker
+yum install -y docker gzip
 systemctl start docker
 systemctl enable docker
 usermod -aG docker ec2-user
 
+docker pull matija24/my-basic-server:latest
+docker save matija24/my-basic-server:latest | gzip > /tmp/flask-app.tar.gz
 
+aws s3 cp /tmp/flask-app.tar.gz s3://matija-devops-docker-images-bucket/flask-app.tar.gz
+
+sudo rm /tmp/flask-app.tar.gz

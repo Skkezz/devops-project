@@ -44,7 +44,8 @@ variable "ec2_public_name" {
 variable "ec2_public_ami" {
   description = "Value of the AMI ID for the public EC2 instance"
   type        = string
-  default     = "ami-096a4fdbcf530d8e0" #Amazon Linux 
+  default     = "ami-023adbbb2c440f837" #Amazon Linux 2023 kernel-6.1 
+
 }
 
 variable "ec2_public_type" {
@@ -53,7 +54,7 @@ variable "ec2_public_type" {
   default     = "t3.micro"
 }
 
-variable ec2_private_name {
+variable "ec2_private_name" {
   description = "Value of the Name for the private EC2 instance"
   type        = string
   default     = "my-private-basic-ec2"
@@ -62,7 +63,7 @@ variable ec2_private_name {
 variable "ec2_private_ami" {
   description = "Value of the AMI ID for the private EC2 instance"
   type        = string
-  default     = "ami-096a4fdbcf530d8e0" #Amazon Linux 
+  default     = "ami-023adbbb2c440f837" #Amazon Linux 2023 kernel-6.1
 }
 
 variable "ec2_private_type" {
@@ -84,8 +85,8 @@ variable "route_public_table_name" {
   default     = "my-basic-public-rt"
 }
 
-variable "route_private_table_name"{
+variable "route_private_table_name" {
   description = "Value of the Name for the private route table"
-  type = string
-  default = "my-basic-private-rt"
+  type        = string
+  default     = "my-basic-private-rt"
 }
