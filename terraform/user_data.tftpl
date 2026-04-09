@@ -11,3 +11,4 @@ docker save matija24/my-basic-server:latest | gzip > /tmp/flask-app.tar.gz
 aws s3 cp /tmp/flask-app.tar.gz s3://matija-devops-docker-images-bucket/flask-app.tar.gz
 
 sudo rm /tmp/flask-app.tar.gz
+docker rmi matija24/my-basic-server:latest
