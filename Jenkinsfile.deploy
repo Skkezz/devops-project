@@ -8,20 +8,6 @@ pipeline {
                 checkout scm
             }
         }
-
-        stage('Build docker image') {
-            agent { label 'my-basic-agent' }
-            steps {
-                sh '''
-                echo "Bulding docker image..."
-                docker build -t my-basic-app .
-                '''
-
-        
-            }
-          
-        }  
-
         stage('Run terraform + Deploy') {
             agent { label 'my-basic-agent' }
             steps {
@@ -49,16 +35,21 @@ pipeline {
                             script: "cd terraform && terraform output -raw ssh_user",
                             returnStdout: true
                         ).trim()
+
+                        def alb_dns_name = sh(
+                            script: "cd terraform && terraform output -raw alb_dns_name",
+                            returnStdout: true
+                        ).trim()
                         
                         
-                        echo "IP address of EC2: ${ec2_ip}"
-                        echo "User for EC2: ${ssh_user}"
-                
+                        echo "IP address for public EC2: ${ec2_ip}"
+                        echo "User for public EC2: ${ssh_user}"
+                        echo "Domain name: ${alb_dns_name}"
                     }
 
                 }   
             }
         }
- 
+
     }
 }
