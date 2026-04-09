@@ -7,21 +7,6 @@ terraform {
   }
 }
 
-# resource "aws_s3_bucket" "docker_images" {
-#   bucket = "matija-devops-docker-images-bucket"
-
-#   tags = {
-#     Name = "docker-images-bucket"
-#   }
-# }
-
-# resource "aws_s3_bucket_ownership_controls" "my_control" {
-#   bucket = aws_s3_bucket.docker_images.id
-#   rule {
-#     object_ownership = "BucketOwnerPreferred"
-#   }
-# }
-
 resource "aws_vpc" "my_vpc" {
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
@@ -264,7 +249,6 @@ resource "aws_instance" "my_private_ec2" {
 
   user_data = templatefile("${path.module}/user_data_private.tftpl", {
     creator = "Matija"
-    public_ec2_ip = aws_instance.my_public_ec2.public_ip
   })
   tags = {
     Name = var.ec2_private_name
