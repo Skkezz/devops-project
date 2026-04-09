@@ -3,7 +3,6 @@ terraform {
     bucket  = "matija-devops-terraform-state-bucket"
     key     = "my-basic-app/terraform.tfstate"
     region  = "eu-central-1"
-    profile = "matija-devops"
   }
 }
 
