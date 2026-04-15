@@ -102,14 +102,7 @@ resource "aws_security_group" "my_security_public_group" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"] // Moja ip adresa
   }
-
-  ingress {
-    from_port   = 5000
-    to_port     = 5000
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] // Moja ip adresa
-  }
-
+  
   egress {
     from_port   = 0
     to_port     = 0
@@ -157,7 +150,7 @@ resource "aws_instance" "my_public_ec2" {
   }
 }
 
-### Block za private ec2 (pravi poseban projekat)
+### Block za private ec2 
 
 resource "aws_security_group" "my_security_private_group" {
   name        = "my-basic-private-sg"

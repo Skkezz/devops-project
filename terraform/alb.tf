@@ -34,7 +34,7 @@ resource "aws_lb_target_group" "main" {
 
 resource "aws_lb" "front" {
   name               = "front-lb"
-  internal           = false
+  internal           = false // znaci da je alb dostupan preko interneta.
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
   subnets            = [aws_subnet.my_public_subnet.id, aws_subnet.my_public2_subnet.id]
