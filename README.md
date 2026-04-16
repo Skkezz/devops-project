@@ -2,7 +2,6 @@
  
 <h2> Deploying basic flask server in a private subnet using SSL and HTTPS encryption with free DNS using Jenkins, GitHub, Terraform, Docker, and AWS. </h2> 
 
-
 Ovaj projekat je napravljen kao primer za automatizovano kreiranje (i destrukciju) AWS resursa i privatne EC2 instance u kojoj se nalazi docker image za pokretanje flask servera.
 
 Za ispunjenje ovog zadatka treba da se urade sledece stavke:
@@ -40,12 +39,12 @@ Nakon pokretanja pipeline-a i uspesnog kreiranja AWS arhitekture koristeci resur
     <img src="https://github.com/Skkezz/devops-project/blob/main/screenshots/aws_architecture.png" alt="AWS architecture" width="400">    
 </div>
 
-* Posto se koristi Application Load Balancer za sigurni i efikasniji mrezni saobracaj, gde takodje se dobija njegov domain name koji pruza besplatno aws, taj domain name moramo isto da dodamo u konfiguraciju dns-a hostry-a. Tako osiguravamo flask web server sa HTTPS protokolom.
+* Posto se koristi Application Load Balancer za sigurni i efikasniji mrezni saobracaj, gde takodje se dobija njegov domain name koji pruza aws, taj domain name moramo isto da dodamo u konfiguraciju dns-a hostry-a. Tako osiguravamo flask web server sa HTTPS protokolom. ALB domain name ce se prikazati u output terminala kad se izvrsi pipeline.
 
 <div align="center">
-    <img src="https://github.com/Skkezz/devops-project/blob/main/screenshots/App_GUI.png" alt="flask GUI" width="600">
+    <img src="https://github.com/Skkezz/devops-project/blob/main/screenshots/app_gui.png" alt="app gui" width="400">
 </div>
 
-<h4>Zasto je ovaj projekat napravljen?</h4>
+<h3>Zasto je ovaj projekat napravljen?</h3>
 
  Ovaj projekat je napravljen za vreme trajanja AWS free trial-a i prvenstvo sluzi za ucenje i usavrsavanje DevOps alata. Projekat je pravljen tako da se koristi besplatan domen i hosting usluge ali da bude realan firmin projekat sa troskovima poput alb-a.
