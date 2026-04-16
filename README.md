@@ -34,7 +34,7 @@ For fulfillment of this task you have to these next steps:
   <img src="https://github.com/Skkezz/devops-project/blob/main/screenshots/pipeline.png" alt="CI/CD pipeline" width="400"/>
 </div>
 
-Nakon pokretanja pipeline-a i uspesnog kreiranja AWS arhitekture koristeci resurse u terraformu dobija se sledeca arhitektura.
+After starting the pipeline and successfully creating the AWS architecture using resources in terraform, the following architecture is obtained.
 
 <div align="center">
     <img src="https://github.com/Skkezz/devops-project/blob/main/screenshots/aws_architecture.png" alt="AWS architecture" width="400">    
