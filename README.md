@@ -28,4 +28,4 @@ Za ispunjenje ovog zadatka treba da se urade sledece stavke:
 
 * Za pravljenje deploy pipeline-a treba se povezati pipeline job sa github repozitorijum u kojoj je Jenkinsfile.deploy skripta. Isto i za destroy pipeline koristeci Jenkinsfile.destroy skriptu. Kod destroy pipeline-a postoji double check koji mora da se potvrdi kako bi se izvrsio.
 
-![CHEESE](/home/matija/devops-project/screenshots/pipeline.png)
+![CHEESE!](/home/matija/devops-project/screenshots/pipeline.png)
