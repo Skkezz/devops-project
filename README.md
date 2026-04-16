@@ -2,32 +2,33 @@
  
 <h2> Deploying basic flask server in a private subnet using SSL and HTTPS encryption with free DNS using Jenkins, GitHub, Terraform, Docker, and AWS. </h2> 
 
-Ovaj projekat je napravljen kao primer za automatizovano kreiranje (i destrukciju) AWS resursa i privatne EC2 instance u kojoj se nalazi docker image za pokretanje flask servera.
+This project is made as an example for automated creation (and destruction) of AWS resources and private EC2 in which the docker image resides for deploying flask server.
 
-Za ispunjenje ovog zadatka treba da se urade sledece stavke:
+For fulfillment of this task you have to these next steps:
 
-* Zahtevanje free domain ("devopsproject.eu.org") od EU.ORG i konektujemo ga na Hostry servere. Domain moze da se ceka i do nekoliko dana zato je najbolje ovo da resimo odmah!
-    * Link za zahtevanje domain-a: https://nic.eu.org/
-    * Link za besplatan DNS: https://hostry.com/products/dns/ 
-    * Link za video tutorial: https://www.youtube.com/watch?v=mYvVQkbyNRg
+* Request a free domain ("devopsproject.eu.org") from EU.ORG and where you connect it to the Hostry servers. Waiting for domain may take some time (24 hours or more), so it's best to do this first!
+    * Link for DNS query: https://nic.eu.org/
+    * Link for free DNS: https://hostry.com/products/dns/ 
+    * Link for video tutorial: https://www.youtube.com/watch?v=mYvVQkbyNRg
+. 
+* In AWS Certificate Manager requeset certificate where you can find CNAME name and CNAME value for configuration of free DNS Hostry.
 
-* U AWS Ceritficate Manager zatraziti certifikat u kome se nalaze CNAME name i CNAME value za konfiguraciju Free DNS Hostry. 
+    * Nakon uspesne konfiguracije u <bold>AWS Certificate Manager</bold> pisati za status certifikata da je ✅Issued! Sa ovim smo obezbedili koriscenje SSL-a za privatnu instancu u kojoj ce da se nalazi flask server.
 
-    * Primer: Posto je meni domain ime "devopsproject.eu.org" iz certifikata CNAME name  uzimam sve karaktere (samo ne "." karakter) pre domain imena i postavljam unutar dns konfiguracije za subdomain. Za CNAME value uzimam sve karaktere (samo ne zadnji "." karakter) i  postavljam unutar dns konfiguracije za value. Vrednosti unutar free dns hostry konfiguracije se postavljaju na tip CNAME.
+    * After successfully configuring certificate his status should be ✅Issued! With this we can use SSL for private EC2 in which will reside flask server.
 
-    Nakon uspesne konfiguracije u <bold>AWS Certificate Manager</bold> pisati za status certifikata da je ✅Issued! Sa ovim smo obezbedili koriscenje SSL-a za privatnu instancu u kojoj ce da se nalazi flask server.
+* Install <bold>Docker</bold> localy.
 
-* Instalacija <bold>Docker-a</bold> na lokalnoj masini.
+* Creating Jenkins image and starting its container localy. After that install suggested plugins and additional plugins: Docker and AWS creds.
 
-* Kreiranje <bold>Jenkins</bold> image-a i pokretanje kontenjera na lokalnoj masini (kod mene je port 8080). U URL pretrazivaca kucati "localhost:port_broj" i instalirati predlozene pluginove. Nakon toga instalirati dodatne pluginove: Docker i AWS creds.
+    * Inside docker plugin set Docker Host URI: unix:///var/run/docker.sock and enabled it (check for connection). For docker agent label and name are "my-basic-agent", and docker image that are we using for this agent is: "matija24/my-basic-agent:latest". Other settings as desired.
 
-    * Unutar docker plugina za Docker Host URI: unix:///var/run/docker.sock i cekirati enabled (proveriti konekciju). Za Docker agenta label i ime su "my-basic-agent" i koriste docker image: "matija24/my-basic-agent:latest" (public docker hub), ostale opcije po zelji.
+    * Inside of AWS creds plugin put credentials of IAM user that you are using.
 
-    * Unutar AWS creds-a staviti kredencijale IAM korisnika kojeg koristite.
 
-* Za pravljenje deploy pipeline-a treba se povezati pipeline job sa github repozitorijum u kojoj je Jenkinsfile.deploy skripta. Isto i za destroy pipeline koristeci Jenkinsfile.destroy skriptu. Kod destroy pipeline-a postoji double check koji mora da se potvrdi kako bi se izvrsio!
+* To create a deploy pipeline you need to bind pipeline job with "Jenkinsfile.deploy" script that is located inside of this github repo. The same applies for the destroy pipeline using "Jenkinsfile.destroy" script. Also, pipeline for destroying has double checking inside the jenkins console!
 
-* Treba postaviti unutar aws iam console za iam korisnika odgovarajuca pravila, tako i za role-ove za koje ce da koristi privatna i javna ec2 instanca.
+* You need to set up inside IAM console for IAM user and S3 bucket certain privileges, same goes for roles that are assigned to the public and private EC2.
 
 <div align="center">
   <img src="https://github.com/Skkezz/devops-project/blob/main/screenshots/pipeline.png" alt="CI/CD pipeline" width="400"/>
@@ -39,12 +40,14 @@ Nakon pokretanja pipeline-a i uspesnog kreiranja AWS arhitekture koristeci resur
     <img src="https://github.com/Skkezz/devops-project/blob/main/screenshots/aws_architecture.png" alt="AWS architecture" width="400">    
 </div>
 
-* Posto se koristi Application Load Balancer za sigurni i efikasniji mrezni saobracaj, gde takodje se dobija njegov domain name koji pruza aws, taj domain name moramo isto da dodamo u konfiguraciju dns-a hostry-a. Tako osiguravamo flask web server sa HTTPS protokolom. ALB domain name ce se prikazati u output terminala kad se izvrsi pipeline.
+* Since Application Load Balancer (ALB) is used for safe and more efficient network traffic, where you also get a domain name from AWS, we must also that domain name to the DNS Hostry configuration. That's how we secure the server with HTTPS protocol. ALB domain name will print out in terminal after successfully deploying.
 
 <div align="center">
     <img src="https://github.com/Skkezz/devops-project/blob/main/screenshots/app_gui.png" alt="app gui" width="400">
 </div>
 
-<h3>Zasto je ovaj projekat napravljen?</h3>
+<h3>Why was this project made?</h3>
 
  Ovaj projekat je napravljen za vreme trajanja AWS free trial-a i prvenstvo sluzi za ucenje i usavrsavanje DevOps alata. Projekat je pravljen tako da se koristi besplatan domen i hosting usluge ali da bude realan firmin projekat sa troskovima poput alb-a.
+
+ This project was created during the duration of the AWS free trial and primarily serves for learning and improving DevOps tools. The project was created to use a free domain and hosting services, but to be a realistic company project with costs like ALB.
