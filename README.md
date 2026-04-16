@@ -13,8 +13,6 @@ For fulfillment of this task you have to these next steps:
 . 
 * In AWS Certificate Manager requeset certificate where you can find CNAME name and CNAME value for configuration of free DNS Hostry.
 
-    * Nakon uspesne konfiguracije u <bold>AWS Certificate Manager</bold> pisati za status certifikata da je ✅Issued! Sa ovim smo obezbedili koriscenje SSL-a za privatnu instancu u kojoj ce da se nalazi flask server.
-
     * After successfully configuring certificate his status should be ✅Issued! With this we can use SSL for private EC2 in which will reside flask server.
 
 * Install <bold>Docker</bold> localy.
@@ -40,14 +38,12 @@ After starting the pipeline and successfully creating the AWS architecture using
     <img src="https://github.com/Skkezz/devops-project/blob/main/screenshots/aws_architecture.png" alt="AWS architecture" width="400">    
 </div>
 
-* Since Application Load Balancer (ALB) is used for safe and more efficient network traffic, where you also get a domain name from AWS, we must also that domain name to the DNS Hostry configuration. That's how we secure the server with HTTPS protocol. ALB domain name will print out in terminal after successfully deploying.
+* Since Application Load Balancer (ALB) is used for safe and more efficient network traffic, where you also get a domain name from AWS, we must also set that domain name to the DNS Hostry configuration. That's how we secure the server with HTTPS protocol. ALB domain name will print out in terminal after successfully deploying.
 
 <div align="center">
     <img src="https://github.com/Skkezz/devops-project/blob/main/screenshots/app_gui.png" alt="app gui" width="400">
 </div>
 
 <h3>Why was this project made?</h3>
-
- Ovaj projekat je napravljen za vreme trajanja AWS free trial-a i prvenstvo sluzi za ucenje i usavrsavanje DevOps alata. Projekat je pravljen tako da se koristi besplatan domen i hosting usluge ali da bude realan firmin projekat sa troskovima poput alb-a.
 
  This project was created during the duration of the AWS free trial and primarily serves for learning and improving DevOps tools. The project was created to use a free domain and hosting services, but to be a realistic company project with costs like ALB.
